@@ -1,0 +1,141 @@
+import doctest
+class GameObject:
+    def __init__(self, name: str, XP: int, ATK: int, DEF: int):
+        """
+            Создание и заполнение базового класса "Игровой объект"
+            :param name: Имя объекта
+            :param XP: Количество здоровья объекта
+            :param ATK: Сила атаки объекта
+            :param DEF: Защита объекта
+
+            Пример:
+            >>> new = GameObject("Xiao", 100, 75, 5)  # инициализация экземпляра класса
+             """
+        if not isinstance(name, (str)):
+            raise TypeError("Имя объекта должно быть типа str")
+        self.name = name
+        if not isinstance(XP, (int)):
+            raise TypeError("Здоровье объекта должно быть типа int")
+        if not (XP >= 0 and XP<=100):
+            raise ValueError("Здоровье объекта должно быть в пределах от 0 до 100")
+        self.XP = XP
+        if not isinstance(ATK, (int)):
+            raise TypeError("Сила атаки объекта должна быть типа int")
+        if not (ATK >= 0 and ATK<=100):
+            raise ValueError("Сила атаки объекта должна быть в пределах от 0 до 100")
+        self.ATK = ATK
+        if not isinstance(DEF, (int)):
+            raise TypeError("Защита объекта должна быть типа int")
+        if not (DEF >= 0 and DEF <= 100):
+            raise ValueError("Защита объекта должна быть в пределах от 0 до 100")
+        self.DEF = DEF
+
+    def __str__(self)-> str:
+        return f"Объект {self.name} с количеством здоровья {self.XP}, силой атаки {self.ATK}, защитой  {self.DEF}."
+
+    def __repr__(self)-> str:
+        return f"{self.__class__.__name__}(имя={self.name!r}, здоровье={self.XP!r}, сила атаки={self.ATK!r}, защита={self.DEF!r})"
+
+    def get_damage(self, minus: int) -> None:
+        """
+               Функция которая отнимает здоровье в случае получения урона с учетом количества защиты персонажа
+               :param minus: Отнимаемое здоровье
+
+               Примеры:
+               >>> new = GameObject("Xiao", 100, 75, 5)
+               >>> new.get_damage(55)
+               """
+        if not isinstance(minus, int):
+            raise TypeError("Отнимаемое здоровье должно быть типа int")
+        if (minus < 0 or minus > 100):
+            raise ValueError("Отнимаемое здоровье должно быть в пределах от 1 до 100")
+        ...
+
+    def case_damage(self, buff: int) -> None:
+        """
+               Функция которая рассчитывает количество урона с учетом дополнительных улучшений, действующих на персонажа
+               :param buff: Улучшение персонажа
+
+               Примеры:
+               >>> new = GameObject("Xiao", 100, 75, 5)
+               >>> new.case_damage(10)
+               """
+        if not isinstance(buff, int):
+            raise TypeError("Улучшение персонажа должно быть типа int")
+        if (buff < 0 or buff > 100):
+            raise ValueError("Улучшение персонажа должно быть в пределах от 1 до 100")
+        ...
+
+class Player(GameObject):
+    def __init__(self, name: str, XP: int, ATK: int, DEF: int, element: int):
+        """
+                Дочерний класс персонаж игрока
+                :param element: стихия персонажа
+
+                Пример:
+                    >>> new = Player("Xiao", 100, 75, 5, 2)  # инициализация экземпляра класса
+        """
+        super().__init__(name, XP, ATK, DEF)
+        if not isinstance(element, (int)):
+            raise TypeError("Тип элементальной магии объекта должен быть типа int")
+        if not (element >= 0 and element<=8):
+            raise ValueError("Тип элементальной магии объекта должен быть в пределах от 0 до 8")
+        self.element = element
+
+    def __repr__(self)-> str: #для отображения всех атрибутов и корректного отображения наименования класса перегружаем метод repr
+        return f"{self.__class__.__name__}(имя={self.name!r}, здоровье={self.XP!r}, сила атаки={self.ATK!r}, защита={self.DEF!r}, элемент={self.element!r})"
+
+    def case_damage(self, buff: int) -> None:
+        """
+                Функция которая рассчитывает количество урона с учетом дополнительных улучшений, действующих на персонажа, и учетом его элемента :param buff: Улучшение персонажа
+                :param buff: Улучшение персонажа
+
+                Примеры:
+                    >>> new = GameObject("Xiao", 100, 75, 5, 2)
+                    >>> new.case_damage(10)
+            """
+        if not isinstance(buff, int):
+            raise TypeError("Улучшение персонажа должно быть типа int")
+        if (buff < 0 or buff > 100):
+            raise ValueError("Улучшение персонажа должно быть в пределах от 1 до 100")
+        ...
+
+
+class NPC(GameObject):
+    def __init__(self, name: str, XP: int, ATK: int, DEF: int, antielement: int):
+        """
+                Дочерний класс персонаж неигровой
+                :param antielement: стихия невосприимчивости персонажа
+
+                Пример:
+                    >>> new = NPC("Xiao", 100, 75, 5, 2)  # инициализация экземпляра класса
+        """
+        super().__init__(name, XP, ATK, DEF)
+        if not isinstance(antielement, (int)):
+            raise TypeError("Тип элементальной невосприимчивости объекта должен быть типа int")
+        if not (antielement >= 0 and antielement <= 8):
+            raise ValueError("Тип элементальной невосприимчивости объекта должен быть в пределах от 0 до 8")
+        self.antielement = antielement
+
+    def __repr__(self) -> str:  # для отображения всех атрибутов и корректного отображения наименования класса перегружаем метод repr
+        return f"{self.__class__.__name__}(имя={self.name!r}, здоровье={self.XP!r}, сила атаки={self.ATK!r}, защита={self.DEF!r}, элемент к которому невосприимчивость={self.antielement!r})"
+
+    def case_damage(self, take: int) -> None:
+        """
+               Функция которая рассчитывает количество урона с учетом элемента, которым наносят урон
+               :param take: Элементальный тип урона
+
+               Примеры:
+               >>> new = NPC("Xiao", 100, 75, 5, 2)
+               >>> new.case_damage(2)
+               """
+        if not isinstance(take, int):
+            raise TypeError("Элементальный тип урона должен быть типа int")
+        if (take < 0 or take > 7):
+            raise ValueError("Элементальный тип урона должен быть в пределах от 1 до 8")
+        ...
+
+
+if __name__ == "__main__":
+    doctest.testmod()
+    pass
